@@ -1,0 +1,14 @@
+name: 2
+age: string
+arr:
+    - first
+    - second
+    - 2
+obj:
+    val1: string
+    val2: true
+arrOfObject:
+    - val1: 0
+      val2: true
+    - val1: test
+      val2: test

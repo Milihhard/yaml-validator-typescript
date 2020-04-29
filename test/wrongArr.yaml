@@ -1,0 +1,8 @@
+name: string
+age: 38
+arr:
+    - first
+    - second
+    - third
+obj: true
+arrOfObject: true
