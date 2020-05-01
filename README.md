@@ -18,6 +18,39 @@ $yarn add yaml-validator-typescript
 
 ## Usage
 
+## Define your modele
+
+You can set you model as you want. You just need to have properties initialized
+
+If you don't want some property to be tested, you can implement `Yaml`
+
+```javascript
+class TestOnlyKeys implements Yaml {
+    keysToTest: (keyof TestOnlyKeys)[] = ['key1', 'key2'];
+    key1: string = '';
+    key2: number = 0;
+    keyNotToTest: boolean = false;
+}
+```
+
+> Here only `key1` and `key2` are tested
+> You can also set some properties optionals:
+
+```javascript
+class Optional implements Yaml {
+    keysToTest: string[] = ['valueToHave', 'valueOptional', 'arrayOptional'];
+    optionals: Set<string> = new Set(['valueOptional', 'arrayOptional']);
+    valueToHave: string = '';
+    valueOptional: string = '';
+    arrayOptional: {valueYouNeed1: string, valueYouNeed2: boolean}[] = [
+        {valueYouNeed1: '', valueYouNeed2: true},
+    ];
+}
+```
+
+> Here `valueOptional` and `arrayOptional` are optionals
+> But if `arrayOptional` is defined, he has to be right
+
 ### As a command
 
 Set a config file at the root of the project:
