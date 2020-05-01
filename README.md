@@ -35,7 +35,7 @@ Then run the command
 ```json
 {
     "script": [
-        "valid-yaml": "yaml-validator"
+        "valid-yaml": "validate-yaml"
     ]
 }
 ```
@@ -45,7 +45,7 @@ Then run the command
 ```json
 {
     "script": [
-        "valid-yaml": "yaml-validator file1.yaml file2.yaml"
+        "valid-yaml": "validate-yaml file1.yaml file2.yaml"
     ]
 }
 ```
