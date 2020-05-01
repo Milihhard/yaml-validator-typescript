@@ -2,7 +2,7 @@
     "name": "yaml-validator-typescript",
     "description": "Yaml validator to test your yaml with a defined model",
     "homepage": "https://github.com/Milihhard/yaml-validator-typescript#readme",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "keywords": [
         "yaml",
         "validator",
