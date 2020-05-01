@@ -20,11 +20,71 @@ $yarn add yaml-validator-typescript
 
 ### As a command
 
-yaml-validator file.yaml model.ts
+Set a config file at the root of the project:
+
+```javascript
+import MyClass from './somewhere';
+module.exports = {
+    structure: new MyClass(),
+    files: ['file1.yaml', 'file2.yaml'],
+};
+```
+
+Then run the command
+
+```json
+{
+    "script": [
+        "valid-yaml": "yaml-validator"
+    ]
+}
+```
+
+> If you have not set the files, you can put them in the command
+
+```json
+{
+    "script": [
+        "valid-yaml": "yaml-validator file1.yaml file2.yaml"
+    ]
+}
+```
 
 ### In your code
 
-First create your class
+```typescript
+import MyClass from './somewhere';
+const validator = new Validator(new MyClass());
+validator.validate('path_of_my_file.yaml').then((errors) => {
+    if (errors.length > 0) {
+        console.log('I have some issues I need to fix 🙀');
+        errors.forEach((error) => {
+            console.log(`- ${result}`);
+        });
+    } else {
+        console.log('No Error in this code 💪');
+    }
+});
+```
+
+You can validate multiple file at the same time with the same validator
 
 ```typescript
+import MyClass from './somewhere';
+const validator = new Validator(new MyClass());
+validator
+    .validateMany('path_of_my_file.yaml', 'another_path_of_my_file.yaml')
+    .then((results) => {
+        files.forEach((file) => {
+            console.log(`${file.name}:`);
+            if (file.results.length > 0) {
+                console.log('I have some issues I need to fix 🙀');
+                file.results.forEach((error) => {
+                    console.log(`- ${result}`);
+                });
+            } else {
+                console.log('No Error in this code 💪');
+            }
+        });
+    });
 ```
