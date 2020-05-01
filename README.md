@@ -34,9 +34,9 @@ Then run the command
 
 ```json
 {
-    "script": [
+    "scripts": {
         "valid-yaml": "validate-yaml"
-    ]
+    }
 }
 ```
 
@@ -44,9 +44,9 @@ Then run the command
 
 ```json
 {
-    "script": [
+    "scripts": {
         "valid-yaml": "validate-yaml file1.yaml file2.yaml"
-    ]
+    }
 }
 ```
 
