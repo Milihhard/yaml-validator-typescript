@@ -12,6 +12,13 @@ class Test {
     obj: TestObject = new TestObject();
     arrOfObject: TestObject[] = [new TestObject()];
 }
+// tslint:disable-next-line: max-classes-per-file
+class TestOnlyKeys implements Yaml {
+    keysToTest: (keyof TestOnlyKeys)[] = ['key1', 'key2'];
+    key1: string = '';
+    key2: number = 0;
+    keyNotToTest: boolean = false;
+}
 const validator = new Validator(new Test());
 const testValidate = (
     path: string,
@@ -76,6 +83,20 @@ describe('Validator', () => {
             const val = new Validator(new Test(), {verbose: true});
             val.validate(process.cwd() + '/test/good.yaml')
                 .then((result) => {
+                    expect(result).to.have.length(0);
+                    done();
+                })
+                .catch((e) => {
+                    done(e);
+                });
+        });
+        it('Should be good with selected keys', (done) => {
+            const val = new Validator(new TestOnlyKeys());
+            val.validate(process.cwd() + '/test/selectedKeys.yaml')
+                .then((result) => {
+                    // tslint:disable-next-line: no-console
+                    console.log('res', result);
+
                     expect(result).to.have.length(0);
                     done();
                 })

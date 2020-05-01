@@ -1,5 +1,5 @@
 import {ValidateOption, Yaml} from './interfaces';
-import {isValidateOption} from './utils/typeValidator';
+import {isValidateOption, isYaml} from './utils/typeValidator';
 import YamlRetriever from './utils/yamlRetriver';
 
 export default class Validator<T> {
@@ -45,8 +45,8 @@ export default class Validator<T> {
             console.log('compareObject', object, source);
         }
         const errors: string[] = [];
-        // We take keyToTest if defined
-        for (const key of object.keyToTest ? object.keyToTest : Object.keys(source)) {
+        // We take keysToTest if defined
+        for (const key of isYaml(source) ? source.keysToTest : Object.keys(source)) {
             errors.push(...this.compare(key, object[key], source[key]));
         }
         return errors;
