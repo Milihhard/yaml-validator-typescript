@@ -1,5 +1,6 @@
 export interface Yaml {
     keysToTest: string[];
+    optionals?: Set<string>;
 }
 
 export interface ValidateOption<T> {

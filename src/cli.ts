@@ -13,6 +13,7 @@ const config: CliConfig = require(process.cwd() + '/yaml-validator');
 const validator = new Validator(config.structure);
 const [, , ...args] = process.argv;
 validator.validateMany(...(config.files ?? args)).then((results) => {
+    let hasError = false;
     results.forEach((result) => {
         // tslint:disable-next-line: no-console
         console.log(
@@ -25,7 +26,13 @@ validator.validateMany(...(config.files ?? args)).then((results) => {
             // tslint:disable-next-line: no-console
             console.log(`   - ${r}`);
         });
+        if (hasErrors(result.results)) {
+            hasError = true;
+        }
     });
+    if (hasError) {
+        process.exit(1);
+    }
 });
 
 function hasErrors(results: string[]): boolean {

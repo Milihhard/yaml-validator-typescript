@@ -19,6 +19,24 @@ class TestOnlyKeys implements Yaml {
     key2: number = 0;
     keyNotToTest: boolean = false;
 }
+
+// tslint:disable-next-line: max-classes-per-file
+class Optional implements Yaml {
+    keysToTest: string[] = ['valueToHave', 'valueOptional', 'arrayOptional'];
+    optionals: Set<string> = new Set(['valueOptional', 'arrayOptional']);
+    valueToHave: string = '';
+    valueOptional: string = '';
+    arrayOptional: {valueYouNeed1: string; valueYouNeed2: boolean}[] = [
+        {valueYouNeed1: '', valueYouNeed2: true},
+    ];
+}
+
+// tslint:disable-next-line: max-classes-per-file
+class TestWithOptional {
+    key1: string = '';
+    key2: Optional[] = [new Optional()];
+}
+
 const validator = new Validator(new Test());
 const testValidate = (
     path: string,
@@ -172,6 +190,20 @@ describe('Validator', () => {
                 },
                 true
             );
+        });
+        it('Should be have error but not on optionnals', (done) => {
+            const val = new Validator(new TestWithOptional());
+            val.validate(process.cwd() + '/test/optional.yaml')
+                .then((result) => {
+                    // tslint:disable-next-line: no-console
+                    console.log('res', result);
+
+                    expect(result).to.have.length(1);
+                    done();
+                })
+                .catch((e) => {
+                    done(e);
+                });
         });
     });
 });

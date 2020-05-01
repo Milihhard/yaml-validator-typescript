@@ -47,7 +47,18 @@ export default class Validator<T> {
         const errors: string[] = [];
         // We take keysToTest if defined
         for (const key of isYaml(source) ? source.keysToTest : Object.keys(source)) {
-            errors.push(...this.compare(key, object[key], source[key]));
+            const errorOfItem = this.compare(key, object[key], source[key]);
+            if (
+                !(
+                    errorOfItem.length > 0 &&
+                    errorOfItem[0].split('.').pop() === key &&
+                    isYaml(source) &&
+                    source.optionals &&
+                    source.optionals.has(key)
+                )
+            ) {
+                errors.push(...errorOfItem);
+            }
         }
         return errors;
     }
