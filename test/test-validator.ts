@@ -85,6 +85,31 @@ describe('Validator', () => {
         });
     });
     describe('Validate error', () => {
+        it('Validate multiple with one failed', (done) => {
+            validator
+                .validateMany(
+                    process.cwd() + '/test/good.yaml',
+                    process.cwd() + '/test/wrong.yaml'
+                )
+                .then((results) => {
+                    // tslint:disable-next-line: no-console
+                    console.log('res', results);
+
+                    expect(results).to.have.length(2);
+                    expect(results[0].name).to.be.equal(
+                        process.cwd() + '/test/good.yaml'
+                    );
+                    expect(results[1].name).to.be.equal(
+                        process.cwd() + '/test/wrong.yaml'
+                    );
+                    expect(results[0].results).to.have.length(0);
+                    expect(results[1].results).not.to.have.length(0);
+                    done();
+                })
+                .catch((e) => {
+                    done(e);
+                });
+        });
         it('Should miss one', (done) => {
             testValidate(process.cwd() + '/test/wrongForgotOne.yaml', done, (result) => {
                 expect(result).to.have.length(1);
