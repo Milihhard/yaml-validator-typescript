@@ -1,5 +1,5 @@
 import {ValidateOption, Yaml} from './interfaces';
-import {isValidateOption} from './typeValidator';
+import {isValidateOption} from './utils/typeValidator';
 import YamlRetriever from './utils/yamlRetriver';
 
 export default class Validator<T> {
@@ -12,35 +12,38 @@ export default class Validator<T> {
         } else {
             if (second) {
                 this.options = second;
-                this.options.stucture = first;
+                this.options.structure = first;
             } else {
-                this.options = {stucture: first};
+                this.options = {structure: first};
             }
         }
-        if (!this.options.stucture) {
+        if (!this.options.structure) {
             throw new Error('The structure is empty');
         }
     }
-    validateMany(...paths: string[]): Promise<string[]> {
+    validateMany(...paths: string[]): Promise<{name: string; results: string[]}[]> {
         const promiseValidate: Promise<string[]>[] = [];
         paths.forEach((path) => {
             promiseValidate.push(this.validate(path));
         });
         return Promise.all(promiseValidate).then((results) => {
-            return results.reduce((acc, result) => [...acc, ...result], []);
+            return results.map((result, index) => ({
+                name: paths[index],
+                results: result,
+            }));
         });
     }
 
     validate(path: string): Promise<string[]> {
-        return YamlRetriever.getYamlUtf8(path)
-            .then((yaml) => {
-                return this.compare('object', yaml, this.options.stucture);
-            })
-            .catch((e) => {
-                return e;
-            });
+        return YamlRetriever.getYamlUtf8(path).then((yaml) => {
+            return this.compare('object', yaml, this.options.structure);
+        });
     }
-    compareObject(object: any, source: any): string[] {
+    private compareObject(object: any, source: any): string[] {
+        if (this.options.verbose) {
+            // tslint:disable-next-line: no-console
+            console.log('compareObject', object, source);
+        }
         const errors: string[] = [];
         // We take keyToTest if defined
         for (const key of object.keyToTest ? object.keyToTest : Object.keys(source)) {
@@ -49,7 +52,11 @@ export default class Validator<T> {
         return errors;
     }
 
-    compareArray(object: any, source: any): string[] {
+    private compareArray(object: any, source: any): string[] {
+        if (this.options.verbose) {
+            // tslint:disable-next-line: no-console
+            console.log('compareArray', object, source);
+        }
         const errors: string[] = [];
         const struct = source[0];
         object.forEach((item: any, index: number) =>
@@ -58,7 +65,11 @@ export default class Validator<T> {
         return errors;
     }
 
-    compare(key: string, object: any, source: any): string[] {
+    private compare(key: string, object: any, source: any): string[] {
+        if (this.options.verbose) {
+            // tslint:disable-next-line: no-console
+            console.log('compare', key);
+        }
         // Both primitives
         if (this.isPrimitive(object) && this.isPrimitive(source)) {
             return typeof source === typeof object ? [] : [key];
@@ -81,7 +92,7 @@ export default class Validator<T> {
             return this.compareObject(object, source).map((err) => key + '.' + err);
         }
     }
-    isPrimitive(object: any): boolean {
+    private isPrimitive(object: any): boolean {
         const primitives = new Set(['string', 'number', 'boolean']);
         return primitives.has(typeof object);
     }

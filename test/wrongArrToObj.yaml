@@ -1,0 +1,11 @@
+name: string
+age: 38
+arr:
+    - first
+    - second
+    - third
+obj:
+    val1: true
+    val2: 5
+arrOfObject:
+    name: test
