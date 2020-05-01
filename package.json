@@ -41,11 +41,10 @@
         "url": "https://github.com/Milihhard/yaml-validator-typescript/issues"
     },
     "dependencies": {
-        "@types/js-yaml": "^3.12.3",
-        "guid-typescript": "^1.0.9",
         "js-yaml": "^3.13.1"
     },
     "devDependencies": {
+        "@types/js-yaml": "^3.12.3",
         "@types/chai": "^4.2.11",
         "@types/debug": "^4.1.5",
         "@types/mocha": "^7.0.2",
