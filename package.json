@@ -1,6 +1,6 @@
 {
     "name": "yaml-validator-typescript",
-    "description": "Wrapper for neo4j to use it in a functionnal way",
+    "description": "Yaml validator to test your yaml with a defined model",
     "homepage": "https://github.com/Milihhard/yaml-validator-typescript#readme",
     "version": "1.0.0",
     "keywords": [
